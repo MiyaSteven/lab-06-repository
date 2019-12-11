@@ -3,6 +3,7 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
+const superagent = require('superagent');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -10,12 +11,20 @@ app.use(cors());
 
 //Routes
 app.get('/location', (req, res) => {
-    let city = req.search_query.data;
+    let city = req.query.data;
+    let URL = `https://maps.googleapis.com/maps/api/geocode/json?address=${req.query.data}&key=${process.env.GEOCODE_API_KEY}`;
+    // let newLocation = searchLatToLong(city);
+    let testLocation = {
+        "search_query": "seattle",
+        "formatted_query": "Seattle, WA, USA",
+        "latitude": "47.606210",
+        "longitude": "-122.332071"
+    }
+    res.send(testLocation);
 
-    let newLocation = searchLatToLong(city);
-
-    res.send(newLocation);
 });
+
+// https://maps.googleapis.com/maps/api/geocode/json?address=Sydney&key=AIzaSyBeEMZYda9yK4YNrrnwLUb_e9mERJYYER8
 
 // app.get('/weather', (req, res) => {
 //     let weather = req.query.data2;
@@ -23,7 +32,6 @@ app.get('/location', (req, res) => {
 //     let newWeather = searchDaily(weather);
 
 //      res.send(newWeather);
-
 
 function searchLatToLong(city){
     const geoData = require('./data/geo.json');
@@ -41,19 +49,19 @@ function searchLatToLong(city){
     return newLocation;
 }
 
-function searchWeather(weather){
-    const darkSkyData = require('./data/geo.json');
+// function searchWeather(weather){
+//     const darkSkyData = require('./data/geo.json');
 
-    const darkSkyResults = darkSkyData.results[0];
+//     const darkSkyResults = darkSkyData.results[0];
 
-    const newWeather = new Weather(weather, darkSkyResults);
+//     const newWeather = new Weather(weather, darkSkyResults);
 
-    return newWeather;
-}
+//     return newWeather;
+// }
 
-function Weather(weather, data2){
-    //will add later today
-}
+// function Weather(weather, data2){
+//     //will add later today
+// }
 
 function Location(city, data){
     this.search_query = city;
