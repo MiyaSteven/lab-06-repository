@@ -15,7 +15,7 @@ app.get('/location', (req, res) => {
     let newLocation = searchLatToLong(city);
 
     res.send(newLocation);
-})
+});
 
 app.get('/weather', (req, res) => {
     let weather = req.query.data2;
@@ -23,7 +23,7 @@ app.get('/weather', (req, res) => {
     let newWeather = searchDaily(weather);
 
     res.send(newWeather);
-}
+})
 
 function searchLatToLong(city){
     const geoData = require('./data/geo.json');
@@ -46,7 +46,7 @@ function searchWeather(weather){
 
     const darkSkyResults = darkSkyData.results[0];
 
-    const newWeather = new weather(weather, darkSkyResults);
+    const newWeather = new Weather(weather, darkSkyResults);
 
     return newWeather;
 }
@@ -64,6 +64,6 @@ function Location(city, data){
 
 app.get('*', (req, res) => {
     res.status(404).send('Page not found');
-}),
+})
 
 app.listen(PORT, () => console.log(`listening on port ${PORT}!`))
