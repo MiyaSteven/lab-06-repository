@@ -10,20 +10,20 @@ app.use(cors());
 
 //Routes
 app.get('/location', (req, res) => {
-    let city = req.query.data;
+    let city = req.search_query.data;
 
     let newLocation = searchLatToLong(city);
 
     res.send(newLocation);
 })
 
-app.get('/weather', (req, res) => {
-    let weather = req.query.data2;
+// app.get('/weather', (req, res) => {
+//     let weather = req.query.data2;
 
-    let newWeather = searchDaily(weather);
+//     let newWeather = searchDaily(weather);
 
-    res.send(newWeather);
-}
+//     res.send(newWeather);
+// });
 
 function searchLatToLong(city){
     const geoData = require('./data/geo.json');
