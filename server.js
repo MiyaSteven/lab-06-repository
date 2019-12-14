@@ -1,13 +1,32 @@
 'use strict';
 
 const express = require('express');
+//sets up express library for server
 require('dotenv').config();
+
 const cors = require('cors');
 const superagent = require('superagent');
 
 const app = express();
+//talking about express library
 const PORT = process.env.PORT || 3001;
 app.use(cors());
+//use cors as policemen
+// const pg = require('pg');
+// const client = new pg.Client(process.env.DATABASE_URL);
+// client.on('error', err => console.error(err));
+
+// client.connect()
+//     .then(() => {
+//     app.listen(PORT, () => console.log(`listening on port ${PORT}!`))
+// }
+
+// app.get('/adds', (req, res) => {
+//     let firstName = req.query.first;
+//     let lastName = req.query.last;
+
+//     client
+// })
 
 //Routes
 app.get('/location', (req, res) => {
@@ -24,29 +43,71 @@ app.get('/location', (req, res) => {
         // }
         res.send(new Location(city, cityData.body.results[0]));
     })
-});
+})
 
 function Location(city, cityData){
-
     this.search_query = city;
     this.formatted_query = cityData.formatted_address;
     this.latitude = cityData.geometry.location.lat;
     this.longitude = cityData.geometry.location.lng;
 }
 
-app.get('/weather', (req, res) => {
-    let weather = req.query.data2;
-    let URL2 = `https://maps.googleapis.com/maps/api/geocode/json?address=${req.query.data2}&key=${process.env.GEOCODE_API_KEY}`;
+// function searchLatToLong(city){
+    //     const geoData = require('./data/geo.json');
+    
+    //     const geoDataResults = geoData.results[0];
+    
+    //     const newLocation = new Location(city, geoDataResults);
+    //     const newLocation = {
+    //         "search_query": city,
+    //         "formatted_query": geoDataResults.formatted_address,
+    //         "latitude": geoDataResults.geometry.location.lat,
+    //         "longitude": geoDataResults.geometry.location.lng
+    //     }
+    
+    //     return newLocation;
+    // }
+// }
 
-    superagent.get(URL2).then(weatherData => {
-        res.send(new Weather(weather, weatherData.body));
-    })
-});
+// app.get('/weather', (req, res) => {
 
-function Weather(weather, weatherData){
-    this.timezone = weather;
-    this.daily = weatherData.daily.data[0].summary;
-}
+//     // /weather?search_query=sydney&latitude=-33.61823&longitude=18.39123&
+
+//     let URL2 = `https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${req.query.data.latitude},${req.query.data.longitude} `;
+// });
+
+
+//     superagent.get(URL2).then( weatherData => {
+//         let responseArray = [];
+
+    
+//         // res.send(new Weather(weather, weatherData.body));
+//         // console.log('SUMMARY', summary);
+//         // console.log('TIME',time)
+        
+        
+//             // let testResponse = [
+//     //     {
+//     //       "forecast": "Partly cloudy until afternoon.",
+//     //       "time": "Mon Jan 01 2001"
+//     //     },
+//     //     {
+//     //       "forecast": "Mostly cloudy in the morning.",
+//     //       "time": "Tue Jan 02 2001"
+//     //     },
+//     // ]
+    
+//     res.send(responseArray);
+
+//     })
+// });
+
+// function Weather(data){
+   
+//     this.summary = data.summary;
+//     this.time = data.time; 
+
+// }
 
 // function searchLatToLong(city){
 //     const geoData = require('./data/geo.json');
@@ -80,6 +141,14 @@ function Weather(weather, weatherData){
 
 app.get('*', (req, res) => {
     res.status(404).send('Page not found');
-})
+});
 
-app.listen(PORT, () => console.log(`listening on port ${PORT}!`))
+app.listen(PORT,  () => {
+    console.log('APP IS RUNNNING ON PORT ', PORT);
+});
+
+// function errorHandler(error, request, response){
+//     response.status(500).send('Internal Error');
+// }
+
+// app.use(errorHandler)
